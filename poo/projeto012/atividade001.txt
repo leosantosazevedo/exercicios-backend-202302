@@ -1,0 +1,42 @@
+Criar uma api conectando ao mysql local
+
+1 - Ambiente do fastapi + uvicorn
+    Verifica
+        pip3 list | grep -i fastapi
+        pip3 list | grep -i uvicorn
+        pip3 list | grep -i mysql-connector
+    Instalar
+        pip3 install fastapi
+        pip3 install uvicorn
+        pip3 install mysql-connector
+
+Container em execução
+        docker ps
+Lista images de Container
+        docker images
+Subir o container do mariadb
+        docker run -d --name mariadb --env MARIADB_PASSWORD=mypass --env MARIADB_ROOT_PASSWORD=mypass -p 3306:3306 mariadb:10.4
+Fazer Download
+    wget https://www.mariadbtutorial.com/wp-content/uploads/2019/10/nation.zip
+    unzip nation.zip
+Conectar ao mysql do container
+    mysql -h localhost -P 3306 --protocol=tcp -u root -p
+Fazer a carga para o mysql
+    mysql -h localhost -P 3306 --protocol=tcp -u root -p < nation.sql
+Conectar ao mysql do container
+    mysql -h localhost -P 3306 --protocol=tcp -u root -p
+    #apresentar as databases
+    show databases;
+Ver a documentação em:
+    https://www.mariadbtutorial.com/getting-started/mariadb-sample-database/
+
+Executar para testar a conexão com o BD:
+    python3 connection.py
+Executar para testar a conexão com o BD + o fastapi:
+    uvicorn main:app --reload
+
+
+#####################################
+...plus
+"Entrar" no container
+        docker exec -it mariadb bash

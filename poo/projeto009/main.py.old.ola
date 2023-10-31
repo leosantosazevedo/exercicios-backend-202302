@@ -1,0 +1,33 @@
+import fastapi
+from pydantic import BaseModel
+import uvicorn
+
+app = fastapi.FastAPI()
+
+menu = [{'id': 1,        'name': 'coffee',      'price': 2.5     },
+        {'id': 2,        'name': 'cake',        'price': 10    },
+        {'id': 3,        'name': 'tea',         'price': 3.2    },
+        {'id': 4,        'name': 'croissant',   'price': 5.79    }]
+
+class HealthCheck(BaseModel):
+    status: str = "OK"
+
+@app.get(
+    "/health",
+    tags=["healthcheck"],
+    summary="Perform a Health Check",
+    response_description="Return HTTP Status Code 200 (OK)",
+    status_code=status.HTTP_200_OK,
+    response_model=HealthCheck,
+)
+
+def get_health() -> HealthCheck:
+    return HealthCheck(status="OK")
+
+@app.get("/")
+def hello_world_root():
+    return {"Turma": "Backend"}
+
+@app.get("/list-menu")
+def list_menu():
+    return {"Menu": menu }
