@@ -16,8 +16,6 @@ def home():
 def page2():
     return flask.render_template('page2.html')
 
-
-
 @app.route("/getContinents")
 def consultaContinentes():
         response2 = requests.get("http://127.0.0.1:8000/getContinents")
@@ -55,8 +53,6 @@ def getRegion():
         html = json2table.convert(json_object, build_direction=build_direction, table_attributes=table_attributes)
         return flask.render_template('generico.html', html=html)
 
-
-
 @app.route("/getCountries")
 def consultaPaises():
         response2 = requests.get("http://127.0.0.1:8000/getCountries")
@@ -80,7 +76,6 @@ def consultaLinguas():
         #return response2.json()
         return flask.render_template('generico.html', html=html)
         #return html
-
 
 if __name__ == '__main__':
     app.run(debug=True)
