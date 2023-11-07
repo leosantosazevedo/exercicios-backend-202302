@@ -1,25 +1,38 @@
 import flask
 import requests
 import json2table
-
+import json
 app = flask.Flask(__name__)
-@app.route("/")
 
-def OlaMundo():
-        return "<p>Ola Mundo</p>"
+#@app.route("/")
+#def OlaMundo():
+#        return "<p>Ola Mundo</p>"
 
-@app.route("/consultaContinentes")
+@app.route('/')
+def home():
+    return flask.render_template('index.html')
+
+@app.route('/page2')
+def page2():
+    return flask.render_template('page2.html')
+
+
+
+@app.route("/getContinents")
 def consultaContinentes():
         response2 = requests.get("http://127.0.0.1:8000/getContinents")
         json_object = response2.json()
+        for data_in in json_object["Continents"]:
+                for data_inside in data_in:
+                        if "name" == data_inside:
+                                data_in["name"] = "<a href='/getRegion?continent_id={0}&name_continent={1}'>{2}</a>".format(data_in["continent_id"],data_in["name"],data_in["name"])
         build_direction = "LEFT_TO_RIGHT"
         table_attributes = {"style" : "width:100%", "border": "1px solid black"}
         html = json2table.convert(json_object, build_direction=build_direction, table_attributes=table_attributes)
-        #print(html)
-        #return response2.json()
-        return html
+        return flask.render_template('generico.html', html=html)
+        #return html
 
-@app.route("/consultaRegioes")
+@app.route("/getRegions")
 def consultaRegioes():
         response2 = requests.get("http://127.0.0.1:8000/getRegions")
         json_object = response2.json()
@@ -28,10 +41,24 @@ def consultaRegioes():
         html = json2table.convert(json_object, build_direction=build_direction, table_attributes=table_attributes)
         #print(html)
         #return response2.json()
-        return html
+        return flask.render_template('generico.html', html=html)
+        #return html
 
-@app.route("/consultaCountries")
-def consultaCountries():
+@app.route("/getRegion")
+def getRegion():
+        continent_id = flask.request.args.get('continent_id')
+        name_continent = flask.request.args.get('name_continent')
+        response2 = requests.get("http://127.0.0.1:8000/getRegion/"+continent_id)
+        json_object = response2.json()
+        build_direction = "LEFT_TO_RIGHT"
+        table_attributes = {"style" : "width:100%", "border": "1px solid black"}
+        html = json2table.convert(json_object, build_direction=build_direction, table_attributes=table_attributes)
+        return flask.render_template('generico.html', html=html)
+
+
+
+@app.route("/getCountries")
+def consultaPaises():
         response2 = requests.get("http://127.0.0.1:8000/getCountries")
         json_object = response2.json()
         build_direction = "LEFT_TO_RIGHT"
@@ -39,18 +66,21 @@ def consultaCountries():
         html = json2table.convert(json_object, build_direction=build_direction, table_attributes=table_attributes)
         #print(html)
         #return response2.json()
-        return html
-        
-@app.route("/consultaCountriesLanguage")
-def consultaCountriesLanguage():
-        response2 = requests.get("http://127.0.0.1:8000/getCountryLanguage")
+        return flask.render_template('generico.html', html=html)
+        #return html
+
+@app.route("/getLanguages")
+def consultaLinguas():
+        response2 = requests.get("http://127.0.0.1:8000/getLanguages")
         json_object = response2.json()
         build_direction = "LEFT_TO_RIGHT"
         table_attributes = {"style" : "width:100%", "border": "1px solid black"}
         html = json2table.convert(json_object, build_direction=build_direction, table_attributes=table_attributes)
         #print(html)
         #return response2.json()
-        return html
+        return flask.render_template('generico.html', html=html)
+        #return html
+
 
 if __name__ == '__main__':
     app.run(debug=True)
