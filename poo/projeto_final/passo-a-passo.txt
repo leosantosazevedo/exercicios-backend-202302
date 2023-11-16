@@ -1,0 +1,8 @@
+1 - criar container com banco de dados
+    docker run -d --name mariadb_projeto_final --env MARIADB_PASSWORD=mypass --env MARIADB_ROOT_PASSWORD=mypass -p 3306:3306 mariadb:10.4
+
+2 - Criar o schema e a tabela
+    mysql -h localhost -P 3306 --protocol=tcp -u root -p < base.sql
+
+
+ 
